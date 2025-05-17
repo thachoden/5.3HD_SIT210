@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Remote Traffic Light Control</title>
+    <style>
+      body {
+        background-color: rgb(63, 63, 63);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Traffic Light Control</h1>
+    <label><input type="checkbox" id="red" /> Red</label><br />
+    <label><input type="checkbox" id="green" /> Green</label><br />
+    <label><input type="checkbox" id="blue" /> Blue</label><br />
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+    <script>
+      // Your Firebase config here
+      const firebaseConfig = {
+        apiKey: "AIzaSyBWuzioLSQewCb7wOl3xNtkN7jHtnIa2YI",
+        authDomain: "trafficlightcontrol-13c4b.firebaseapp.com",
+        databaseURL:
+          "https://trafficlightcontrol-13c4b-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "trafficlightcontrol-13c4b",
+        storageBucket: "trafficlightcontrol-13c4b.firebasestorage.app",
+        messagingSenderId: "950095457487",
+        appId: "1:950095457487:web:a5a8d1ae7ceeef91051bba",
+        measurementId: "G-FG4GL4F560",
+      };
+
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      const database = firebase.database();
+
+      // Function to update LED status in Firebase
+      function updateLED(color, isOn) {
+        database.ref("trafficLight/" + color).set(isOn);
+      }
+
+      // Event listeners for checkboxes
+      document.getElementById("red").addEventListener("change", (e) => {
+        updateLED("red", e.target.checked);
+      });
+      document.getElementById("green").addEventListener("change", (e) => {
+        updateLED("green", e.target.checked);
+      });
+      document.getElementById("blue").addEventListener("change", (e) => {
+        updateLED("blue", e.target.checked);
+      });
+
+      // Optional: Load initial state from Firebase
+      ["red", "green", "blue"].forEach((color) => {
+        database.ref("trafficLight/" + color).on("value", (snapshot) => {
+          document.getElementById(color).checked = snapshot.val() || false;
+        });
+      });
+    </script>
+  </body>
+</html>
